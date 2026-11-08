@@ -1,0 +1,23 @@
+{
+  "lookback_days": 7,
+  "journals": [
+    {"short": "D&S",   "name": "Disability & Society",                              "issn": "0968-7599"},
+    {"short": "DSQ",   "name": "Disability Studies Quarterly",                      "issn": "1041-5718"},
+    {"short": "ALTER", "name": "ALTER – European Journal of Disability Research",   "issn": "1875-0672"},
+    {"short": "SJDR",  "name": "Scandinavian Journal of Disability Research",       "issn": "1501-7419"},
+    {"short": "JLCDS", "name": "Journal of Literary & Cultural Disability Studies", "issn": "1757-6458"},
+    {"short": "CJDS",  "name": "Canadian Journal of Disability Studies",            "issn": "1929-9192"}
+  ],
+  "authors": [
+    {"name": "Tom Shakespeare",          "openalex_id": ""},
+    {"name": "Dan Goodley",              "openalex_id": ""},
+    {"name": "Robert McRuer",            "openalex_id": ""},
+    {"name": "Alison Kafer",             "openalex_id": ""},
+    {"name": "Rosemarie Garland-Thomson","openalex_id": ""},
+    {"name": "Tanya Titchkosky",         "openalex_id": ""},
+    {"name": "Nirmala Erevelles",        "openalex_id": ""},
+    {"name": "Sami Schalk",              "openalex_id": ""},
+    {"name": "Jasbir Puar",              "openalex_id": ""},
+    {"name": "Shaun Grech",              "openalex_id": ""}
+  ]
+}
