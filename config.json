@@ -1,23 +1,78 @@
 {
   "lookback_days": 7,
+  "author_lookback_days": 60,
   "journals": [
-    {"short": "D&S",   "name": "Disability & Society",                              "issn": "0968-7599"},
-    {"short": "DSQ",   "name": "Disability Studies Quarterly",                      "issn": "1041-5718"},
-    {"short": "ALTER", "name": "ALTER – European Journal of Disability Research",   "issn": "1875-0672"},
-    {"short": "SJDR",  "name": "Scandinavian Journal of Disability Research",       "issn": "1501-7419"},
-    {"short": "JLCDS", "name": "Journal of Literary & Cultural Disability Studies", "issn": "1757-6458"},
-    {"short": "CJDS",  "name": "Canadian Journal of Disability Studies",            "issn": "1929-9192"}
+    {
+      "short": "D&S",
+      "name": "Disability & Society",
+      "issn": "0968-7599"
+    },
+    {
+      "short": "DSQ",
+      "name": "Disability Studies Quarterly",
+      "issn": "1041-5718"
+    },
+    {
+      "short": "ALTER",
+      "name": "ALTER – European Journal of Disability Research",
+      "issn": "1875-0672"
+    },
+    {
+      "short": "SJDR",
+      "name": "Scandinavian Journal of Disability Research",
+      "issn": "1501-7419"
+    },
+    {
+      "short": "JLCDS",
+      "name": "Journal of Literary & Cultural Disability Studies",
+      "issn": "1757-6458"
+    },
+    {
+      "short": "CJDS",
+      "name": "Canadian Journal of Disability Studies",
+      "issn": "1929-9192"
+    }
   ],
   "authors": [
-    {"name": "Tom Shakespeare",          "openalex_id": ""},
-    {"name": "Dan Goodley",              "openalex_id": ""},
-    {"name": "Robert McRuer",            "openalex_id": ""},
-    {"name": "Alison Kafer",             "openalex_id": ""},
-    {"name": "Rosemarie Garland-Thomson","openalex_id": ""},
-    {"name": "Tanya Titchkosky",         "openalex_id": ""},
-    {"name": "Nirmala Erevelles",        "openalex_id": ""},
-    {"name": "Sami Schalk",              "openalex_id": ""},
-    {"name": "Jasbir Puar",              "openalex_id": ""},
-    {"name": "Shaun Grech",              "openalex_id": ""}
+    {
+      "name": "Tom Shakespeare",
+      "openalex_id": "A5050056029|A5109846444"
+    },
+    {
+      "name": "Dan Goodley",
+      "openalex_id": "A5015299854"
+    },
+    {
+      "name": "Robert McRuer",
+      "openalex_id": "A5085323311|A5104419057"
+    },
+    {
+      "name": "Alison Kafer",
+      "openalex_id": "A5071048630"
+    },
+    {
+      "name": "Rosemarie Garland-Thomson",
+      "openalex_id": "A5084214158|A5006092671"
+    },
+    {
+      "name": "Tanya Titchkosky",
+      "openalex_id": "A5060867632"
+    },
+    {
+      "name": "Nirmala Erevelles",
+      "openalex_id": "A5021097874"
+    },
+    {
+      "name": "Sami Schalk",
+      "openalex_id": "A5016306818"
+    },
+    {
+      "name": "Jasbir Puar",
+      "openalex_id": "A5001782188"
+    },
+    {
+      "name": "Shaun Grech",
+      "openalex_id": "A5070271797"
+    }
   ]
 }

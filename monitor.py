@@ -26,6 +26,7 @@ UA = "jangeup-monitor/1.0" + (f" (mailto:{MAILTO})" if MAILTO else "")
 OPENALEX_KEY = os.environ.get("OPENALEX_API_KEY", "")
 TG_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TG_CHAT = os.environ.get("TELEGRAM_CHAT_ID", "")
+POST_TITLES = os.environ.get("POST_TITLES", "1") == "1"  # 0이면 수집만, 게시는 Claude 예약 작업이 담당
 TG_LIMIT = 3900  # 텔레그램 메시지 한도 4096자, 여유분 확보
 
 
@@ -37,7 +38,7 @@ def get_json(url, tries=3):
                 return json.load(r)
         except Exception as e:  # noqa: BLE001
             print(f"[warn] {url[:90]}… ({e})", file=sys.stderr)
-            time.sleep(2 * (i + 1))
+            time.sleep(5 * (i + 1))
     return None
 
 
@@ -95,7 +96,8 @@ def from_openalex_author(author, since):
     if not OPENALEX_KEY or not author.get("openalex_id"):
         return []
     q = urllib.parse.urlencode({
-        "filter": f"author.id:{author['openalex_id']},from_created_date:{since}",
+        # from_created_date는 유료 플랜 전용 → 출판일 기준, 중복은 seen.json이 막음
+        "filter": f"author.id:{author['openalex_id']},from_publication_date:{since}",
         "per-page": 50,
         "api_key": OPENALEX_KEY,
     })
@@ -197,8 +199,10 @@ def main():
     for j in cfg.get("journals", []):
         items += from_crossref(j, since)
         time.sleep(1)
+    a_since = (now - timedelta(days=cfg.get("author_lookback_days", 60))).strftime("%Y-%m-%d")
     for a in cfg.get("authors", []):
-        items += from_openalex_author(a, since)
+        items += from_openalex_author(a, a_since)
+        time.sleep(1)
 
     new, ids = [], set()
     for it in items:
@@ -213,7 +217,7 @@ def main():
         stamp = now.isoformat(timespec="minutes")
         for it in new:
             it["found_at"] = stamp
-        if not post_digest(new, now):
+        if POST_TITLES and not post_digest(new, now):
             sys.exit(1)  # 게시 실패 시 아무것도 저장 안 함 → 다음 실행 때 재시도
         y, w, _ = now.isocalendar()
         week_path = DATA / f"{y}-W{w:02d}.json"
@@ -221,6 +225,14 @@ def main():
         week += new
         week_path.write_text(json.dumps(week, ensure_ascii=False, indent=1), encoding="utf-8")
         seen |= ids
+    # 일일 파일: 새 항목이 0건이어도 항상 기록 → Claude가 "신간 없음"과 "아직 미실행"을 구분
+    daily = DATA / "daily"
+    daily.mkdir(exist_ok=True)
+    day_path = daily / f"{now:%Y-%m-%d}.json"
+    day_items = load(day_path, {}).get("items", []) + new  # 하루 두 번 실행돼도 누적
+    day_path.write_text(
+        json.dumps({"date": f"{now:%Y-%m-%d}", "count": len(day_items), "items": day_items},
+                   ensure_ascii=False, indent=1), encoding="utf-8")
     seen_path.write_text(json.dumps(sorted(seen), ensure_ascii=False), encoding="utf-8")
 
 
