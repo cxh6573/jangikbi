@@ -1,16 +1,16 @@
 name: daily-monitor
 on:
   schedule:
-    - cron: "0 22 * * *"   # 매일 07:00 KST (UTC 22:00)
-  workflow_dispatch: {}     # Actions 탭에서 수동 실행 가능
+    - cron: "17 21 * * *"   # 매일 06:17 KST (정각 혼잡 회피). Claude 일일 요약은 07:43에 이 결과를 읽음
+  workflow_dispatch: {}
 permissions:
   contents: write
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Monitor
@@ -19,6 +19,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
           CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
+          POST_TITLES: "0"   # 영어 제목 게시 끔 → 한글 게시는 Claude 예약 작업이 담당
         run: python monitor.py
       - name: Save data
         run: |
