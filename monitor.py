@@ -42,6 +42,10 @@ def get_json(url, tries=3):
     return None
 
 
+# 정오표·사설·철회 공지 제외 (제목이 이 단어로 시작하는 경우)
+SKIP_TITLE = __import__("re").compile(r"^\s*(correction|corrigendum|erratum|errata|editorial|retraction|expression of concern)\b", __import__("re").I)
+
+
 def clean(s):
     return " ".join(html.unescape(html.unescape(s or "")).replace("<jats:p>", "").replace("</jats:p>", "").split())
 
@@ -62,7 +66,7 @@ def from_crossref(journal, since):
     out = []
     for w in (d or {}).get("message", {}).get("items", []):
         title = clean((w.get("title") or [""])[0])
-        if not title:
+        if not title or SKIP_TITLE.match(title):
             continue
         authors = ", ".join(
             " ".join(x for x in (a.get("given"), a.get("family")) if x)
