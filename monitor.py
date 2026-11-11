@@ -96,6 +96,15 @@ def inverted_to_text(inv):
     return " ".join(pos[i] for i in sorted(pos))
 
 
+def license_of(w):
+    """OpenAlex 작품에서 라이선스 문자열(cc-by 등)을 꺼낸다. 없으면 빈 문자열."""
+    for loc in ("best_oa_location", "primary_location"):
+        lic = (w.get(loc) or {}).get("license")
+        if lic:
+            return lic
+    return ""
+
+
 def from_openalex_author(author, since):
     if not OPENALEX_KEY or not author.get("openalex_id"):
         return []
@@ -120,6 +129,7 @@ def from_openalex_author(author, since):
             "url": f"https://doi.org/{doi}" if doi else w["id"],
             "abstract": inverted_to_text(w.get("abstract_inverted_index")),
             "oa": (w.get("open_access") or {}).get("is_oa"),
+            "license": license_of(w),
             "via": "openalex",
         })
     return out
@@ -129,13 +139,13 @@ def enrich_abstracts(items):
     """Crossref에 초록이 없는 건은 OpenAlex에서 보충 (키가 있을 때만)."""
     if not OPENALEX_KEY:
         return
-    need = [it for it in items if it.get("doi") and not it.get("abstract")]
+    need = [it for it in items if it.get("doi") and (not it.get("abstract") or "license" not in it)]
     for i in range(0, len(need), 40):
         chunk = need[i:i + 40]
         q = urllib.parse.urlencode({
             "filter": "doi:" + "|".join(it["doi"] for it in chunk),
             "per-page": 50,
-            "select": "doi,abstract_inverted_index,open_access",
+            "select": "doi,abstract_inverted_index,open_access,best_oa_location,primary_location",
             "api_key": OPENALEX_KEY,
         })
         d = get_json(f"https://api.openalex.org/works?{q}")
@@ -143,8 +153,12 @@ def enrich_abstracts(items):
         for it in chunk:
             w = by.get(it["doi"].lower())
             if w:
-                it["abstract"] = inverted_to_text(w.get("abstract_inverted_index"))
+                if not it.get("abstract"):
+                    it["abstract"] = inverted_to_text(w.get("abstract_inverted_index"))
                 it["oa"] = (w.get("open_access") or {}).get("is_oa")
+                it["license"] = license_of(w)
+            elif "license" not in it:
+                it["license"] = ""
 
 
 def load(path, default):
@@ -238,6 +252,32 @@ def main():
         json.dumps({"date": f"{now:%Y-%m-%d}", "count": len(day_items), "items": day_items},
                    ensure_ascii=False, indent=1), encoding="utf-8")
     seen_path.write_text(json.dumps(sorted(seen), ensure_ascii=False), encoding="utf-8")
+    build_archive()
+
+
+def build_archive():
+    """'다시 읽기'용 목록: 지금까지 수집한 글 중 초록이 있는 것 전부(최신순), 라이선스 보충."""
+    by_id = {}
+    for wp in sorted(DATA.glob("20*-W*.json")):
+        for it in load(wp, []):
+            by_id[it["id"]] = it
+    path = DATA / "archive.json"
+    old = {it["id"]: it for it in load(path, [])}
+    items = []
+    for i, it in by_id.items():
+        if "license" not in it and "license" in old.get(i, {}):
+            it["license"] = old[i]["license"]
+        if it.get("abstract"):
+            items.append(it)
+    missing = [it for it in items if "license" not in it][:120]  # 한 번에 최대 120건 보충
+    if missing:
+        enrich_abstracts(missing)
+    for it in items:
+        it.setdefault("license", "")
+    items.sort(key=lambda x: x.get("found_at", ""), reverse=True)
+    keep = ("id", "title", "authors", "source", "source_name", "url", "abstract", "oa", "license", "found_at")
+    path.write_text(json.dumps([{k: it.get(k) for k in keep} for it in items], ensure_ascii=False, indent=1),
+                    encoding="utf-8")
 
 
 if __name__ == "__main__":
