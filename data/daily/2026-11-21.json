@@ -1,0 +1,59 @@
+{
+ "date": "2026-11-21",
+ "count": 4,
+ "items": [
+  {
+   "id": "doi:10.1080/09687599.2026.2763448",
+   "doi": "10.1080/09687599.2026.2763448",
+   "title": "From freedom to leave to freedom to love: couple rules and pathogenic vulnerability in Australia’s Disability Support Pension",
+   "authors": "Molly Saunders",
+   "source": "D&S",
+   "source_name": "Disability & Society",
+   "url": "https://doi.org/10.1080/09687599.2026.2763448",
+   "abstract": "",
+   "via": "crossref",
+   "license": "",
+   "found_at": "2026-11-21T11:11+09:00"
+  },
+  {
+   "id": "doi:10.1080/09687599.2026.2763452",
+   "doi": "10.1080/09687599.2026.2763452",
+   "title": "Acts that express and transform: bringing Critical ADHD Studies closer to home",
+   "authors": "David Jackson-Perry, Hanna Bertilsdotter Rosqvist, Andrew Ivan Brown",
+   "source": "D&S",
+   "source_name": "Disability & Society",
+   "url": "https://doi.org/10.1080/09687599.2026.2763452",
+   "abstract": "",
+   "via": "crossref",
+   "license": "",
+   "found_at": "2026-11-21T11:11+09:00"
+  },
+  {
+   "id": "doi:10.18061/dsq.6340",
+   "doi": "10.18061/dsq.6340",
+   "title": "Title Pending 6340",
+   "authors": "",
+   "source": "DSQ",
+   "source_name": "Disability Studies Quarterly",
+   "url": "https://doi.org/10.18061/dsq.6340",
+   "abstract": "",
+   "via": "crossref",
+   "license": "",
+   "found_at": "2026-11-21T11:11+09:00"
+  },
+  {
+   "id": "doi:10.1016/s0140-6736(26)02148-3",
+   "doi": "10.1016/s0140-6736(26)02148-3",
+   "title": "Disability-inclusive research: operational challenges",
+   "authors": "Manasi Murthy Mittinty, Tom Shakespeare",
+   "source": "학자:Tom Shakespeare",
+   "source_name": "The Lancet",
+   "url": "https://doi.org/10.1016/s0140-6736(26)02148-3",
+   "abstract": "",
+   "oa": false,
+   "license": "",
+   "via": "openalex",
+   "found_at": "2026-11-21T11:11+09:00"
+  }
+ ]
+}
